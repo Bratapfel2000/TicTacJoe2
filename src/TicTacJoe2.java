@@ -7,12 +7,10 @@ public class TicTacJoe2 {
 
 		String[] fields = {"1","2","3","4","5","6","7","8","9"};
 		String start_player = "X";
-		System.out.println("===============================");
-		System.out.println(" TicTacJoe - 2 - Version 0.001");
-		System.out.println("===============================");
+		System.out.println("TicTacJoe - 1 B - Version 0.001");
 		System.out.println(" ");
 		printGameField(fields);
-		makeMove(start_player,fields);
+		makeMoveStringXError(start_player,fields);
 	}
 
 	public static void printGameField(String[] fields) {
@@ -21,7 +19,6 @@ public class TicTacJoe2 {
 			System.out.print(fields[i]+" ");
 		}
 		System.out.println();
-
 		for (int i=3; i< 6;i++) {
 			System.out.print(fields[i]+" ");
 		}
@@ -32,9 +29,8 @@ public class TicTacJoe2 {
 		System.out.println("");
 	}
 
-	//with string return
-	//with error message when field occupied
-	public static String [] makeMove(String player, String[] fields) {
+
+	public static String [] makeMoveStringXError(String player, String[] fields) {
 		System.out.print("Player: " +player+", ");
 		int enter_number;		
 		Scanner in = new Scanner(System.in);		
@@ -44,20 +40,21 @@ public class TicTacJoe2 {
 			System.out.println("");
 			System.out.println(" + + + Already occupied. Try again. + + +");
 			printGameField(fields);
-			return makeMove(player,fields);
+			return makeMoveStringXError(player,fields);
 		}
+
 		else {fields[enter_number-1]=player;
 		printGameField(fields);
 		if (boardFull(player, fields)==true) {
 			System.out.println("Board Full   ---  GAME OVER!");
-			return gameOver();
+			return gameOver(player, fields);
 		}
 		if (win(fields)==true) {
 			System.out.println("Player "+player+" wins!");
-			return gameOver();
+			return gameOver(player, fields);
 		}
 		}
-		return makeMove(otherPlayer(player),fields);		
+		return makeMoveStringXError(otherPlayer(player),fields);		
 	}	
 
 	public static String otherPlayer(String player) {
@@ -71,9 +68,11 @@ public class TicTacJoe2 {
 		return problem_player;
 	}	
 
-	//returns true when board full and false if not full
+	//returns true when board full / false if not full
 	public static boolean boardFull(String player, String[] fields) {
 		for (int i=0;i<fields.length;i++) {
+			//	System.out.println(i+"-"+fields[i]);
+			//	System.out.println(fields[i]+"-"+Integer.toString(i+1)+(fields[i]=="X"));
 			if (fields[i]!=player && fields[i]!=otherPlayer(player)) {
 				return false;
 			}
@@ -81,10 +80,24 @@ public class TicTacJoe2 {
 		return true;	
 	}
 
-	public static String [] gameOver() {
+	public static String [] gameOver(String player, String[] fields) {
 		String [] result = {"Game Over"};
-		System.out.println("Game Over");
-		return result;
+		System.out.println("Play Again (y/n?):");
+		String strings;
+		int numbers;
+		Scanner in = new Scanner(System.in);
+		strings = in.nextLine().toString();
+		if (strings.equals("y")) {
+			printGameField(fields);
+			return makeMoveStringXError(player,fields); 
+		}
+		if (strings.equals("n")) {        	
+			System.out.println("Ende!");
+			return result;}
+		else {        	
+			System.out.println("Wrong Input!");
+			return gameOver(player, fields);
+		}	
 	}
 
 	public static boolean win(String[]fields) {
