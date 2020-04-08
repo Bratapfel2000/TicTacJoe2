@@ -5,12 +5,24 @@ public class TicTacJoe2 {
 
 	public static void main(String[] args) {
 
-		String[] fields = {"1","2","3","4","5","6","7","8","9"};
+		String [] fields = fieldsGenerator();
 		String start_player = "X";
-		System.out.println("TicTacJoe - 1 B - Version 0.001");
-		System.out.println(" ");
+		
+		System.out.println("===============================");
+		System.out.println(" TicTacJoe 2 - 2 Version 0.003");
+		System.out.println("===============================");
+
 		printGameField(fields);
-		makeMoveStringXError(start_player,fields);
+		makeMove(start_player,fields);
+	}
+
+	public static String [] fieldsGenerator() {
+		int m = 9;
+		String [] fields = new String[m];
+		for (int i = 0; i<m;i++) {	
+			fields[i]=Integer.toString(i+1);
+		}
+		return fields;
 	}
 
 	public static void printGameField(String[] fields) {
@@ -29,8 +41,7 @@ public class TicTacJoe2 {
 		System.out.println("");
 	}
 
-
-	public static String [] makeMoveStringXError(String player, String[] fields) {
+	public static String [] makeMove(String player, String[] fields) {
 		System.out.print("Player: " +player+", ");
 		int enter_number;		
 		Scanner in = new Scanner(System.in);		
@@ -40,7 +51,7 @@ public class TicTacJoe2 {
 			System.out.println("");
 			System.out.println(" + + + Already occupied. Try again. + + +");
 			printGameField(fields);
-			return makeMoveStringXError(player,fields);
+			return makeMove(player,fields);
 		}
 
 		else {fields[enter_number-1]=player;
@@ -54,7 +65,7 @@ public class TicTacJoe2 {
 			return gameOver(player, fields);
 		}
 		}
-		return makeMoveStringXError(otherPlayer(player),fields);		
+		return makeMove(otherPlayer(player),fields);		
 	}	
 
 	public static String otherPlayer(String player) {
@@ -88,8 +99,8 @@ public class TicTacJoe2 {
 		Scanner in = new Scanner(System.in);
 		strings = in.nextLine().toString();
 		if (strings.equals("y")) {
-			printGameField(fields);
-			return makeMoveStringXError(player,fields); 
+			printGameField(fieldsGenerator());
+			return makeMove(player,fieldsGenerator()); 
 		}
 		if (strings.equals("n")) {        	
 			System.out.println("Ende!");
