@@ -6,14 +6,42 @@ public class TicTacJoe2 {
 	public static void main(String[] args) {
 
 		String [] fields = fieldsGenerator();
-		String start_player = "X";
-		
+
 		System.out.println("===============================");
-		System.out.println(" TicTacJoe 2 - 2 Version 0.003");
+		System.out.println(" TicTacJoe 2 - 2 Version 0.004");
 		System.out.println("===============================");
 
+		String start_player = choosePlayer();
 		printGameField(fields);
 		makeMove(start_player,fields);
+	}
+
+	public static String choosePlayer() {
+		System.out.println("Choose Player (X/O):");
+		String player;
+		Scanner in = new Scanner(System.in);
+		player = in.nextLine().toString();
+		if (player.equals("x") || player.equals("X")) {
+			return "X"; 
+		}        
+		if (player.equals("o") || player.equals("O")) {
+			return "O"; 
+		}
+		else {        	
+			System.out.println("Wrong Input!");
+			return choosePlayer();
+		} 
+	}
+
+	public static String otherPlayer(String player) {
+		if (player == "X") {
+			return "O";
+		}		
+		if (player == "O") {
+			return "X";
+		}
+		String problem_player = "Something went wrong.";
+		return problem_player;
 	}
 
 	public static String [] fieldsGenerator() {
@@ -62,22 +90,11 @@ public class TicTacJoe2 {
 		}
 		if (win(fields)==true) {
 			System.out.println("Player "+player+" wins!");
-			return gameOver(player, fields);
+			return gameOver(otherPlayer(player), fields);
 		}
 		}
 		return makeMove(otherPlayer(player),fields);		
-	}	
-
-	public static String otherPlayer(String player) {
-		if (player == "X") {
-			return "O";
-		}		
-		if (player == "O") {
-			return "X";
-		}
-		String problem_player = "Sth weng wrong";
-		return problem_player;
-	}	
+	}		
 
 	//returns true when board full / false if not full
 	public static boolean boardFull(String player, String[] fields) {
