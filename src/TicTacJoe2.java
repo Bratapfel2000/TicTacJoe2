@@ -8,12 +8,13 @@ public class TicTacJoe2 {
 		String [] fields = fieldsGenerator();
 
 		System.out.println("===============================");
-		System.out.println(" TicTacJoe 2 - 2 Version 0.004");
+		System.out.println(" TicTacJoe 2 - 2 Version 0.005");
 		System.out.println("===============================");
 
+		int[] gameResult = new int[2];
 		String start_player = choosePlayer();
 		printGameField(fields);
-		makeMove(start_player,fields);
+		makeMove(start_player,fields, gameResult);
 	}
 
 	public static String choosePlayer() {
@@ -69,7 +70,7 @@ public class TicTacJoe2 {
 		System.out.println("");
 	}
 
-	public static String [] makeMove(String player, String[] fields) {
+	public static String [] makeMove(String player, String[] fields, int[] gameResult) {
 		System.out.print("Player: " +player+", ");
 		int enter_number;		
 		Scanner in = new Scanner(System.in);		
@@ -79,28 +80,27 @@ public class TicTacJoe2 {
 			System.out.println("");
 			System.out.println(" + + + Already occupied. Try again. + + +");
 			printGameField(fields);
-			return makeMove(player,fields);
+			return makeMove(player,fields, gameResult);
 		}
 
 		else {fields[enter_number-1]=player;
 		printGameField(fields);
 		if (boardFull(player, fields)==true) {
 			System.out.println("Board Full   ---  GAME OVER!");
-			return gameOver(player, fields);
+			return gameOver(player, fields, gameResult);
 		}
 		if (win(fields)==true) {
 			System.out.println("Player "+player+" wins!");
-			return gameOver(otherPlayer(player), fields);
+		    counter(player, gameResult);
+			return gameOver(otherPlayer(player), fields, gameResult);
 		}
 		}
-		return makeMove(otherPlayer(player),fields);		
+		return makeMove(otherPlayer(player),fields, gameResult);		
 	}		
 
 	//returns true when board full / false if not full
 	public static boolean boardFull(String player, String[] fields) {
 		for (int i=0;i<fields.length;i++) {
-			//	System.out.println(i+"-"+fields[i]);
-			//	System.out.println(fields[i]+"-"+Integer.toString(i+1)+(fields[i]=="X"));
 			if (fields[i]!=player && fields[i]!=otherPlayer(player)) {
 				return false;
 			}
@@ -108,23 +108,28 @@ public class TicTacJoe2 {
 		return true;	
 	}
 
-	public static String [] gameOver(String player, String[] fields) {
-		String [] result = {"Game Over"};
+	public static String [] gameOver(String player, String[] fields, int[] gameResult) {
+		String [] gameOver = {"Game Over"};
 		System.out.println("Play Again (y/n?):");
-		String strings;
-		int numbers;
+		String play_again_input;
 		Scanner in = new Scanner(System.in);
-		strings = in.nextLine().toString();
-		if (strings.equals("y")) {
+		play_again_input = in.nextLine().toString();
+		if (play_again_input.equals("y")) {
 			printGameField(fieldsGenerator());
-			return makeMove(player,fieldsGenerator()); 
+			return makeMove(player,fieldsGenerator(), gameResult); 
 		}
-		if (strings.equals("n")) {        	
-			System.out.println("Ende!");
-			return result;}
+		if (play_again_input.equals("n")) {        	
+			System.out.println("The End!");
+			if (gameResult[0]>gameResult[1]) {
+				System.out.println("Player X Is The Ultimate Winner Of The Game!");
+			}
+			else {System.out.println("Player O Is The Ultimate Winner Of The Game!");}
+			return gameOver;
+			}
+			
 		else {        	
 			System.out.println("Wrong Input!");
-			return gameOver(player, fields);
+			return gameOver(player, fields, gameResult);
 		}	
 	}
 
@@ -157,5 +162,19 @@ public class TicTacJoe2 {
 			return scanInt();
 		}
 		return x;
+	}
+	
+	public static int [] counter(String player, int[] gameResult) {
+		
+		if (player.equals("X")) {        	
+			gameResult[0]+=1;}		
+		else if (player.equals("O")) {        	
+			gameResult[1]+=1;}
+
+		System.out.println(" ");
+		System.out.println("Player X:"+ gameResult[0]+" - Player O:"+ gameResult[1]);
+		System.out.println(" ");
+		return gameResult;
+		
 	}
 }
